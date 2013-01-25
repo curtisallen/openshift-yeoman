@@ -12,3 +12,17 @@
 # prevent your application from stopping cleanly or starting at all.
 # Application start and stop is subject to different timeouts
 # throughout the system.
+# Install the dependencies
+cd $OPENSHIFT_REPO_DIR
+$OPENSHIFT_DATA_DIR/bin/npm \
+    --cache="$OPENSHIFT_DATA_DIR".npm \
+    --tmp=$OPENSHIFT_TMP_DIR install
+ 
+export GEM_HOME=$OPENSHIFT_DATA_DIR/gems
+export PATH=$OPENSHIFT_DATA_DIR/bin:$OPENSHIFT_DATA_DIR/gems/bin:$OPENSHIFT_DATA_DIR/phantomjs-1.8.1-linux-x86_64/bin/:$PATH
+
+# call yeoman on app
+yeoman build
+# start the application
+nohup $OPENSHIFT_DATA_DIR/bin/node $OPENSHIFT_REPO_DIR/server.js >> $OPENSHIFT_NODEJS_LOG_DIR/server.log 2>&1&
+exit 0
